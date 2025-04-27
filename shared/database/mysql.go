@@ -51,8 +51,11 @@ func (c MysqlConfig) OpenMysqlConn() (rds *MySQL, err error) {
 		c.DatabaseName,
 	)
 
+	fmt.Printf("DB Connection String: %s", connString)
+
 	db, err := gorm.Open(mysql.Open(connString), &gorm.Config{})
 	if err != nil {
+		fmt.Printf("Error opening MySQL connection: %s", err)
 		return nil, err
 	}
 
