@@ -6,6 +6,7 @@ import (
 
 	"github.com/facebookgo/grace/gracehttp"
 	"github.com/foodieeoo/models"
+	"github.com/foodieeoo/shared/database"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"gopkg.in/yaml.v2"
@@ -32,6 +33,26 @@ func main() {
 		panic(err)
 	}
 
-	e.Start(fmt.Sprintf(":%d", config.Port))
+	mysqlConfig := database.MysqlConfig{
+		DatabaseHost:     config.DatabaseHost,
+		DatabaseUser:     config.DatabaseUser,
+		DatabasePassword: config.DatabasePassword,
+		DatabasePort:     config.DatabasePort,
+		DatabaseName:     config.DatabaseName,
+	}
+
+	mysql := database.NewMysql(mysqlConfig)
+
+	mysqlSession, err := mysql.OpenMysqlConn()
+	if err != nil {
+		fmt.Printf("Error open mysql master connection, err: %s", err.Error())
+		panic(err)
+	}
+
+	fmt.Printf("mysqlSession: %v\n", mysqlSession)
+
+	fmt.Printf("Starting server on port %d\n", config.ApplicationPort)
+
+	e.Start(fmt.Sprintf(":%d", config.ApplicationPort))
 	gracehttp.Serve(e.Server)
 }
