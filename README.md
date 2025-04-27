@@ -48,3 +48,25 @@ go run -mod=vendor main.go
 go build -mod=vendor
 ./<executable-name> # e.g., ./transaction-tracker
 ```
+
+
+## Running the DB Migrations
+
+1. Install goose to handle migrations for the service (https://github.com/pressly/goose)
+
+2. To create a new Migration file, run the following command:
+
+    ```goose -dir db/migrations create create_new_table sql```
+
+3. To check the status of migrations, run the following command:
+
+   ```goose -dir db/migrations mysql "<user>:<password>@tcp(<host>:<port>)/<database_name>?parseTime=true" status```
+
+4. To upgrade the DB, run the following command:
+
+   ```goose -dir db/migrations mysql "<user>:<password>@tcp(<host>:<port>)/<database_name>?parseTime=true" up```
+
+5. To downgrade the DB, run the following command:
+
+   ```goose -dir db/migrations mysql "<user>:<password>@tcp(<host>:<port>)/<database_name>?parseTime=true" down```
+
