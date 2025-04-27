@@ -10,6 +10,15 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"gopkg.in/yaml.v2"
+
+	orderRepository "github.com/foodieeoo/domain/order/repository"
+	productRepository "github.com/foodieeoo/domain/product/repository"
+
+	orderUsecase "github.com/foodieeoo/domain/order/usecase"
+	productUsecase "github.com/foodieeoo/domain/product/usecase"
+
+	orderHandler "github.com/foodieeoo/domain/order/delivery/http"
+	productHandler "github.com/foodieeoo/domain/product/delivery/http"
 )
 
 func main() {
@@ -52,6 +61,15 @@ func main() {
 	fmt.Printf("mysqlSession: %v\n", mysqlSession)
 
 	fmt.Printf("Starting server on port %d\n", config.ApplicationPort)
+
+	orderRepo := orderRepository.NewOrderRepository(mysqlSession.Client)
+	productRepo := productRepository.NewProductRepository(mysqlSession.Client)
+
+	orderUsecase := orderUsecase.NewOrderUsecase(orderRepo)
+	productUsecase := productUsecase.NewProductUsecase(productRepo)
+
+	orderHandler.NewHandlerOrder(e, orderUsecase, &config)
+	productHandler.NewHandlerProduct(e, productUsecase, &config)
 
 	e.Start(fmt.Sprintf(":%d", config.ApplicationPort))
 	gracehttp.Serve(e.Server)
