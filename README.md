@@ -160,3 +160,7 @@ go build -mod=vendor
 
    ```goose -dir db/migrations mysql "<user>:<password>@tcp(<host>:<port>)/<database_name>?parseTime=true" down```
 
+
+## Running the DB Seeders
+The seeder files have been added to onboard the initialisation data for the application. The sql scripts have been added and located in `db/seeders` directory of the project.
+Simply execute all the DML scripts sequentially after running the migrations to onboard initial data for the app.

@@ -2,15 +2,12 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 /*
 Restaurant represents a restaurant entity
 */
 type Restaurant struct {
-	gorm.Model
 	ID          int64     `gorm:"column:id" json:"id"`
 	Name        string    `gorm:"column:name" json:"name"`
 	Address     string    `gorm:"column:address" json:"address"`
