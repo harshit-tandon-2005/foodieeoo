@@ -1,10 +1,11 @@
 package http
 
 import (
+	"net/http"
+
 	"github.com/foodieeoo/domain/product"
 	"github.com/foodieeoo/models"
 	"github.com/labstack/echo"
-	"net/http"
 )
 
 type handlerProduct struct {
@@ -18,8 +19,8 @@ func NewHandlerProduct(e *echo.Echo, usecase product.Usecase, config *models.Con
 		config:  config,
 	}
 
-	e.GET("api/v1/products", handler.GetProducts)
-	e.GET("api/v1/products/:id", handler.GetProduct)
+	e.GET("api/product", handler.GetProducts)
+	e.GET("api/product/:id", handler.GetProduct)
 }
 
 func (h *handlerProduct) GetProducts(c echo.Context) error {
