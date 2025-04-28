@@ -20,7 +20,7 @@ func NewHandlerOrder(e *echo.Echo, usecase order.Usecase, config *models.Config)
 		config:  config,
 	}
 
-	e.POST("api/v1/orders", handler.CreateOrder)
+	e.POST("api/order", handler.CreateOrder)
 }
 
 func (h *handlerOrder) CreateOrder(c echo.Context) error {
