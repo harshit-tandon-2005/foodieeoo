@@ -2,15 +2,12 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 /*
 User represents a user of the application
 */
 type User struct {
-	gorm.Model
 	ID    int64  `gorm:"column:id" json:"id"`
 	Name  string `gorm:"column:name" json:"name"`
 	Email string `gorm:"column:email" json:"email"`

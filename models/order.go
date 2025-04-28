@@ -2,15 +2,12 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 /*
 Order represents a customer's order
 */
 type Order struct {
-	gorm.Model
 	ID           int64     `gorm:"column:id" json:"id"`
 	UserID       int64     `gorm:"column:user_id" json:"userId"`
 	RestaurantID int64     `gorm:"column:restaurant_id" json:"restaurantId"`

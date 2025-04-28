@@ -6,6 +6,7 @@ CREATE TABLE products (
     `name` VARCHAR(255) NOT NULL,
     `description` TEXT,
     `price` DECIMAL(10, 2) NOT NULL,
+    `currency` VARCHAR(3) NOT NULL DEFAULT 'INR',
     `category` enum('APPETIZER','MAIN_COURSE','DESSERT','DRINK') NOT NULL DEFAULT 'APPETIZER',
     `type` enum('VEGETARIAN','NON_VEGETARIAN','VEGAN') NOT NULL DEFAULT 'VEGETARIAN',
     `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
