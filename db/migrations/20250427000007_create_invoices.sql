@@ -11,6 +11,7 @@ CREATE TABLE invoices (
     `payment_method` VARCHAR(255) NOT NULL,
     `payment_status` VARCHAR(255) NOT NULL,
     `payment_date` DATETIME NULL,
+    `coupon_code` VARCHAR(16) NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),

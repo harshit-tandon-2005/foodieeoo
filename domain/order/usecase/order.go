@@ -33,8 +33,19 @@ func (u *orderUsecase) CreateOrder(ctx echo.Context) models.ApiUsescaseResponse 
 		return resp
 	}
 
+	isCouponValid, err := u.ValidateCoupon(ctx, req.CouponCode)
+	if err != nil {
+		fmt.Printf("Error validating coupon: %s", err.Error())
+		return resp
+	}
+
+	if !isCouponValid {
+		return util.SetUsecaseResponse(nil, err, http.StatusBadRequest, "INVALID_COUPON_CODE", constants.INVALID_COUPON_CODE)
+	}
+
+	discount := 15.0
+
 	availableProducts := resp.Data.([]OrderModels.AvailableProducts)
-	discount := 0.0
 
 	return u.CreateOrderUtil(ctx, availableProducts, userID, req, discount)
 
@@ -78,7 +89,26 @@ func (u *orderUsecase) ValidateProduct(ctx echo.Context, resturantID int, req Or
 	return util.SetUsecaseResponse(availableProducts, nil, http.StatusOK, "SUCCESS", "Success")
 }
 
-func (u *orderUsecase) CreateOrderUtil(ctx echo.Context, availableProducts []OrderModels.AvailableProducts, userID int, req OrderModels.CreateOrderRequest, discount float64) models.ApiUsescaseResponse {
+func (u *orderUsecase) ValidateCoupon(ctx echo.Context, couponCode string) (bool, error) {
+
+	length := len(couponCode)
+
+	if length < 8 || length > 10 {
+		return false, nil
+	}
+
+	coupon, err := u.couponRepo.GetCoupons(couponCode)
+	if err != nil {
+		return false, err
+	}
+
+	if len(coupon) < 2 {
+		return false, nil
+	}
+	return true, nil
+}
+
+func (u *orderUsecase) CreateOrderUtil(ctx echo.Context, availableProducts []OrderModels.AvailableProducts, userID int, req OrderModels.CreateOrderRequest, discountPercentage float64) models.ApiUsescaseResponse {
 
 	resturantID := availableProducts[0].RestaurantProducts.RestaurantID
 	orderItems := []models.OrderItem{}
@@ -117,6 +147,8 @@ func (u *orderUsecase) CreateOrderUtil(ctx echo.Context, availableProducts []Ord
 		return util.SetUsecaseResponse(nil, err, http.StatusInternalServerError, "ORDER_ITEMS_CREATION_FAILED", constants.INTERNAL_SERVER_ERROR)
 	}
 
+	discount := totalAmount * discountPercentage / 100
+
 	invoice := &models.Invoice{
 		OrderID:            order.ID,
 		InvoiceNumber:      uuid.New().String(),
@@ -126,6 +158,7 @@ func (u *orderUsecase) CreateOrderUtil(ctx echo.Context, availableProducts []Ord
 		TotalPayableAmount: totalAmount - discount,
 		PaymentMethod:      constants.PAYMENT_METHOD_CREDIT_CARD,
 		PaymentStatus:      constants.PAYMENT_STATUS_PENDING,
+		CouponCode:         req.CouponCode,
 	}
 
 	invoice, err = u.orderRepo.CreateInvoice(tx, invoice)

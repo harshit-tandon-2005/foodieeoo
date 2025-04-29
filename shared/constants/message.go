@@ -5,4 +5,5 @@ const (
 	PRODUCT_NOT_FOUND     = "Product not found"
 	ORDER_CREATION_FAILED = "Order creation failed"
 	PRODUCT_NOT_AVAILABLE = "Product not available"
+	INVALID_COUPON_CODE   = "Invalid coupon code"
 )

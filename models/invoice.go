@@ -18,6 +18,7 @@ type Invoice struct {
 	PaymentMethod      string     `gorm:"column:payment_method" json:"paymentMethod"` // e.g., NETBANKING, CREDIT_CARD, DEBIT_CARD, UPI
 	PaymentStatus      string     `gorm:"column:payment_status" json:"paymentStatus"` // e.g., PENDING, COMPLETED, FAILED
 	PaymentDate        *time.Time `gorm:"column:payment_date" json:"paymentDate"`
+	CouponCode         string     `gorm:"column:coupon_code" json:"couponCode"`
 	CreatedAt          time.Time  `gorm:"column:created_at" json:"createdAt"`
 	UpdatedAt          time.Time  `gorm:"column:updated_at" json:"updatedAt"`
 
