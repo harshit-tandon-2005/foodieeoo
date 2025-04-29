@@ -20,3 +20,13 @@ func ApiResponse(c echo.Context, status string, data interface{}, message string
 
 	return c.JSON(httpCode, resp)
 }
+
+func SetUsecaseResponse(data interface{}, err error, statusCode int, errorCode, message string) models.ApiUsescaseResponse {
+	return models.ApiUsescaseResponse{
+		Data:       data,
+		Error:      err,
+		StatusCode: statusCode,
+		ErrorCode:  errorCode,
+		Message:    message,
+	}
+}

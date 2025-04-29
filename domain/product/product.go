@@ -15,4 +15,5 @@ type Usecase interface {
 type Repository interface {
 	GetProduct(ctx context.Context, id string) (*models.Product, error)
 	GetProducts(ctx context.Context) ([]models.Product, error)
+	GetResturantProduct(ctx context.Context, resturantID int, productID string) (*models.RestaurantProduct, error)
 }

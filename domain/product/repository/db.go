@@ -33,3 +33,11 @@ func (h *mysqlHandler) GetProducts(ctx context.Context) ([]models.Product, error
 	}
 	return products, nil
 }
+
+func (h *mysqlHandler) GetResturantProduct(ctx context.Context, resturantID int, productID string) (*models.RestaurantProduct, error) {
+	product := models.RestaurantProduct{}
+	if err := h.session.WithContext(ctx).Where("product_id = ?", productID).Where("restaurant_id = ?", resturantID).Unscoped().First(&product).Error; err != nil {
+		return nil, err
+	}
+	return &product, nil
+}

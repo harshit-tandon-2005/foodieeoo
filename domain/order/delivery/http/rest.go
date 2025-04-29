@@ -1,8 +1,6 @@
 package http
 
 import (
-	"net/http"
-
 	"github.com/foodieeoo/domain/order"
 	"github.com/foodieeoo/models"
 	"github.com/foodieeoo/shared/util"
@@ -24,5 +22,10 @@ func NewHandlerOrder(e *echo.Echo, usecase order.Usecase, config *models.Config)
 }
 
 func (h *handlerOrder) CreateOrder(c echo.Context) error {
-	return util.ApiResponse(c, "success", nil, "Order created successfully", http.StatusOK, nil)
+	resp := h.usecase.CreateOrder(c)
+	if resp.Error != nil {
+		return util.ApiResponse(c, "error", resp.Data, resp.Message, resp.StatusCode, nil)
+	}
+
+	return util.ApiResponse(c, "success", resp.Data, resp.Message, resp.StatusCode, nil)
 }
