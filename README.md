@@ -139,6 +139,8 @@ go build -mod=vendor
 ./<executable-name> # e.g., ./transaction-tracker
 ```
 
+5. The .vscode directory contains a `launch.json` file which can be used to run the application in the Debug mode in VS code.
+
 
 ## Running the DB Migrations
 
