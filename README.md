@@ -139,6 +139,8 @@ go build -mod=vendor
 ./<executable-name> # e.g., ./transaction-tracker
 ```
 
+5. The .vscode directory contains a `launch.json` file which can be used to run the application in the Debug mode in VS code.
+
 
 ## Running the DB Migrations
 
@@ -164,3 +166,20 @@ go build -mod=vendor
 ## Running the DB Seeders
 The seeder files have been added to onboard the initialisation data for the application. The sql scripts have been added and located in `db/seeders` directory of the project.
 Simply execute all the DML scripts sequentially after running the migrations to onboard initial data for the app.
+
+## Ingestion for Coupon Codes
+An API has been exposed which ingests the coupon codes present in the .gz files.
+The Curl for the API is as follows-
+
+```
+curl --location 'http://localhost:8080/api/coupon' \
+--header 'Content-Type: application/json' \
+--data '[
+    {
+        "filename": "FILE_2",
+        "filepath": "/absoolute/path/of/directory/couponbase1.gz"
+    }
+]'
+```
+
+A filename parameter has been added which identifies from which file a coupon code was found and gets stored in the table coupons (refer table struct)

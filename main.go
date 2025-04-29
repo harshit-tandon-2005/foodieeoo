@@ -11,12 +11,15 @@ import (
 	"github.com/labstack/echo/middleware"
 	"gopkg.in/yaml.v2"
 
+	couponRepository "github.com/foodieeoo/domain/coupon/repository"
 	orderRepository "github.com/foodieeoo/domain/order/repository"
 	productRepository "github.com/foodieeoo/domain/product/repository"
 
+	couponUsecase "github.com/foodieeoo/domain/coupon/usecase"
 	orderUsecase "github.com/foodieeoo/domain/order/usecase"
 	productUsecase "github.com/foodieeoo/domain/product/usecase"
 
+	couponHandler "github.com/foodieeoo/domain/coupon/delivery/http"
 	orderHandler "github.com/foodieeoo/domain/order/delivery/http"
 	productHandler "github.com/foodieeoo/domain/product/delivery/http"
 )
@@ -62,12 +65,15 @@ func main() {
 
 	orderRepo := orderRepository.NewOrderRepository(mysqlSession.Client)
 	productRepo := productRepository.NewProductRepository(mysqlSession.Client)
+	couponRepo := couponRepository.NewCouponRepository(mysqlSession.Client)
 
-	orderUsecase := orderUsecase.NewOrderUsecase(orderRepo, productRepo, mysqlSession.Client)
+	orderUsecase := orderUsecase.NewOrderUsecase(orderRepo, productRepo, couponRepo, mysqlSession.Client)
 	productUsecase := productUsecase.NewProductUsecase(productRepo)
+	couponUsecase := couponUsecase.NewCouponUsecase(couponRepo, mysqlSession.Client)
 
 	orderHandler.NewHandlerOrder(e, orderUsecase, &config)
 	productHandler.NewHandlerProduct(e, productUsecase, &config)
+	couponHandler.NewHandlerCoupon(e, couponUsecase, &config)
 
 	e.Start(fmt.Sprintf(":%d", config.ApplicationPort))
 	gracehttp.Serve(e.Server)
