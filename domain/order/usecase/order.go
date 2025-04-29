@@ -33,17 +33,22 @@ func (u *orderUsecase) CreateOrder(ctx echo.Context) models.ApiUsescaseResponse 
 		return resp
 	}
 
-	isCouponValid, err := u.ValidateCoupon(ctx, req.CouponCode)
-	if err != nil {
-		fmt.Printf("Error validating coupon: %s", err.Error())
-		return resp
-	}
+	discount := 0.0
 
-	if !isCouponValid {
-		return util.SetUsecaseResponse(nil, err, http.StatusBadRequest, "INVALID_COUPON_CODE", constants.INVALID_COUPON_CODE)
-	}
+	if req.CouponCode != "" {
 
-	discount := 15.0
+		isCouponValid, err := u.ValidateCoupon(ctx, req.CouponCode)
+		if err != nil {
+			fmt.Printf("Error validating coupon: %s", err.Error())
+			return resp
+		}
+
+		if isCouponValid {
+			discount = 15.0
+		} else {
+			fmt.Printf("Invalid coupon code: %s", req.CouponCode)
+		}
+	}
 
 	availableProducts := resp.Data.([]OrderModels.AvailableProducts)
 
