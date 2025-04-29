@@ -17,5 +17,7 @@ type User struct {
 	CountryCode string    `gorm:"column:country_code" json:"countryCode"`
 	CreatedAt   time.Time `gorm:"column:created_at" json:"createdAt"`
 	UpdatedAt   time.Time `gorm:"column:updated_at" json:"updatedAt"`
-	Orders      []Order   `gorm:"foreignKey:UserID" json:"orders"` // One-to-Many relationship with Order
+
+	Orders   []Order   `gorm:"foreignKey:UserID" json:"orders"`   // One-to-Many relationship with Order
+	Invoices []Invoice `gorm:"foreignKey:UserID" json:"invoices"` // One-to-Many relationship with Invoice
 }
